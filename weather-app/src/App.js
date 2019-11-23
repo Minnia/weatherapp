@@ -3,7 +3,9 @@ import Titles from "./components/Titles";
 import Forms from "./components/Forms";
 import Weather from "./components/Weather";
 
-const API_KEY = "dfcd8627004749e34be1c50afd7967ec";
+console.log(process.env.REACT_APP_API_KEY);
+
+const API_KEY = process.env.REACT_APP_API_KEY;
 
 const App = () => {
   const [temperature, setTemperature] = useState(null);
