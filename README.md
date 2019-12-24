@@ -8,7 +8,7 @@ a city name and a country name. When the user presses the button, the applicatio
 
 ## Frameworks used
 
-ReactJS
+ReactJS and Redux
 
 ## Installation
 
