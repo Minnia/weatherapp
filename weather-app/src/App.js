@@ -1,40 +1,23 @@
-import React, { useState } from "react";
+import React from "react";
+import { useSelector } from "react-redux";
 import Titles from "./components/Titles";
 import Forms from "./components/Forms";
 import Weather from "./components/Weather";
-
-const API_KEY = process.env.REACT_APP_API_KEY;
+import actions from "./redux/actions";
+import { store } from "./redux/store";
 
 const App = () => {
-  const [temperature, setTemperature] = useState(null);
-  const [city, setCity] = useState(null);
-  const [country, setCountry] = useState(null);
-  const [humidity, setHumidity] = useState(null);
-  const [description, setDescription] = useState(null);
-  const [error, setError] = useState(null);
+  const weather = useSelector(state => state.weather);
+  const { temperature, city, country, humidity, description, error } = weather;
+  const errorMessage =
+    error === "Request failed with status code 404" ? "Place not found" : error;
   const getWeather = async event => {
     event.preventDefault();
+
     const city = event.target.elements.city.value;
     const country = event.target.elements.country.value;
-    const api_call = await fetch(
-      `http://api.openweathermap.org/data/2.5/weather/?q=${city},${country}&&appid=${API_KEY}&units=metric`
-    );
-    const data = await api_call.json();
-    if (city && country) {
-      console.log(data);
-      setTemperature(data.main.temp);
-      setCity(data.name);
-      setCountry(data.sys.country);
-      setHumidity(data.main.humidity);
-      setDescription(data.weather[0].description);
-    } else {
-      setTemperature(null);
-      setCity(null);
-      setCountry(null);
-      setHumidity(null);
-      setDescription(null);
-      setError("Please enter valid input");
-    }
+
+    store.dispatch(actions.weather.getWeather(city, country));
   };
   return (
     <div>
@@ -53,7 +36,7 @@ const App = () => {
                   country={country}
                   humidity={humidity}
                   description={description}
-                  error={error}
+                  error={errorMessage}
                 />
               </div>
             </div>
